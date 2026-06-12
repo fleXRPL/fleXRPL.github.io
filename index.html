@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fleXRPL — AI-Native Open Source</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0c0f;
+    --bg-2: #10141a;
+    --bg-3: #161c24;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.14);
+    --text: #e8edf5;
+    --text-muted: #7a8799;
+    --text-dim: #4a5568;
+    --accent-teal: #00d4a8;
+    --accent-teal-dim: rgba(0,212,168,0.12);
+    --accent-teal-border: rgba(0,212,168,0.25);
+    --accent-coral: #ff6b4a;
+    --accent-coral-dim: rgba(255,107,74,0.10);
+    --accent-blue: #4d9fff;
+    --accent-blue-dim: rgba(77,159,255,0.10);
+    --accent-amber: #f5a623;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  html { background: var(--bg); color: var(--text); font-family: var(--font-display); font-size: 16px; line-height: 1.6; }
+
+  body { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ─── HEADER ─── */
+  .header {
+    padding: 72px 0 56px;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 64px;
+  }
+
+  .header-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent-teal);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .header h1 em {
+    font-style: normal;
+    color: var(--accent-teal);
+  }
+
+  .header-sub {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 560px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .meta-chip::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-teal);
+  }
+
+  .meta-chip.amber::before { background: var(--accent-amber); }
+  .meta-chip.coral::before { background: var(--accent-coral); }
+
+  /* ─── SECTION LABELS ─── */
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  /* ─── PRIMARY PROJECTS ─── */
+  .projects-primary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .project-card {
+    background: var(--bg-2);
+    padding: 28px;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .project-card:hover { background: var(--bg-3); }
+
+  .project-card.featured {
+    background: var(--bg-3);
+  }
+
+  .project-card.featured::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent-teal);
+  }
+
+  .project-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    display: inline-block;
+  }
+
+  .tag-health {
+    background: rgba(0,212,168,0.1);
+    color: var(--accent-teal);
+    border: 0.5px solid var(--accent-teal-border);
+  }
+
+  .tag-intel {
+    background: rgba(77,159,255,0.1);
+    color: var(--accent-blue);
+    border: 0.5px solid rgba(77,159,255,0.25);
+  }
+
+  .tag-devtools {
+    background: rgba(245,166,35,0.1);
+    color: var(--accent-amber);
+    border: 0.5px solid rgba(245,166,35,0.25);
+  }
+
+  .tag-pypi {
+    background: rgba(255,107,74,0.1);
+    color: var(--accent-coral);
+    border: 0.5px solid rgba(255,107,74,0.25);
+  }
+
+  .project-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .link-pill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 5px 11px;
+    border-radius: 5px;
+    border: 0.5px solid var(--border-strong);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .link-pill:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
+
+  .link-pill svg { width: 10px; height: 10px; }
+
+  /* ─── PYPI GRID ─── */
+  .pypi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+  }
+
+  .pypi-card {
+    background: var(--bg-2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: border-color 0.2s;
+  }
+
+  .pypi-card:hover { border-color: var(--border-strong); }
+
+  .pypi-card-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-coral);
+    margin-bottom: 6px;
+  }
+
+  .pypi-card-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── PHILOSOPHY ─── */
+  .philosophy {
+    border-left: 2px solid var(--accent-teal);
+    padding: 24px 28px;
+    background: var(--accent-teal-dim);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 48px;
+  }
+
+  .philosophy p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .philosophy p strong {
+    color: var(--text);
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  /* ─── STANDARDS ─── */
+  .standards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .standard-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: var(--bg-2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .standard-icon {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent-teal);
+    width: 24px;
+    height: 24px;
+    border: 0.5px solid var(--accent-teal-border);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .standard-text strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .standard-text span {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    border-top: 0.5px solid var(--border);
+    padding-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 16px;
+  }
+
+  .footer-sig {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+
+  .footer-links a:hover { color: var(--accent-teal); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .header { padding: 48px 0 36px; }
+    .header h1 { font-size: 36px; }
+    .footer { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <p class="header-eyebrow">fleXRPL · Open Source Initiative</p>
+  <h1>Built by one.<br><em>Scaled by AI.</em></h1>
+  <p class="header-sub">An independent AI-native development organization — building clinical intelligence, political analysis tools, and observability automation as a nomadic coder in partnership with large language models.</p>
+  <div class="header-meta">
+    <span class="meta-chip">Active since 2021</span>
+    <span class="meta-chip amber">14+ GitHub repositories</span>
+    <span class="meta-chip coral">5 PyPI packages published</span>
+  </div>
+</header>
+
+<!-- PHILOSOPHY -->
+<div class="philosophy">
+  <p>These projects exist because <strong>complex problems don't wait for teams.</strong> The fleXRPL organization is a working experiment in what a single engineer with deep domain knowledge can ship when AI handles the scaffolding — from clinical genomics tooling to cross-spectrum political intelligence synthesis.</p>
+</div>
+
+<!-- PRIMARY PROJECTS -->
+<section class="section">
+  <p class="section-label">Primary Projects</p>
+  <div class="projects-primary">
+
+    <div class="project-card featured">
+      <span class="project-tag tag-health">Clinical Intelligence</span>
+      <p class="project-name">HealthWeave</p>
+      <p class="project-desc">Local-first clinical intelligence platform. A Tier 2 domain-specific intelligence layer above commodity healthcare AI — using map-reduce orchestration with specialist micro-models via Ollama. Built for HIPAA-regulated environments where data sovereignty is non-negotiable.</p>
+      <div class="project-links">
+        <a href="https://github.com/fleXRPL/healthweave" class="link-pill">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          github
+        </a>
+        <a href="https://github.com/fleXRPL/healthweave/wiki" class="link-pill">wiki</a>
+      </div>
+    </div>
+
+    <div class="project-card featured">
+      <span class="project-tag tag-health">OSINT · Synthesis</span>
+      <p class="project-name">Sift</p>
+      <p class="project-desc">Structured intelligence extraction from unstructured clinical and open-source data. Designed as a companion layer to HealthWeave — providing domain-specific filtering, pattern recognition, and synthesis at the edge without cloud dependency.</p>
+      <div class="project-links">
+        <a href="https://github.com/fleXRPL" class="link-pill">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          github
+        </a>
+      </div>
+    </div>
+
+    <div class="project-card featured">
+      <span class="project-tag tag-intel">Political Intelligence</span>
+      <p class="project-name">Signal</p>
+      <p class="project-desc">Five-pass OSINT-style political intelligence brief system ingesting 18 cross-spectrum RSS sources. Python + Ollama + GitHub Actions pipeline publishing synthesized daily briefings to a static site — no cloud dependency, no vendor lock-in.</p>
+      <div class="project-links">
+        <a href="https://flexrpl.github.io/signal" class="link-pill">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>
+          live site
+        </a>
+        <a href="https://github.com/fleXRPL/signal" class="link-pill">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          github
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PYPI PACKAGES -->
+<section class="section">
+  <p class="section-label">Observability Automation · PyPI Packages</p>
+  <div class="pypi-grid">
+    <div class="pypi-card">
+      <p class="pypi-card-name">datadog-dashboard-deployer</p>
+      <p class="pypi-card-desc">Automated Datadog dashboard deployment from code</p>
+    </div>
+    <div class="pypi-card">
+      <p class="pypi-card-name">datadog-monitor-deployer</p>
+      <p class="pypi-card-desc">Monitor-as-code for Datadog alerting pipelines</p>
+    </div>
+    <div class="pypi-card">
+      <p class="pypi-card-name">datadog-healthcheck-deployer</p>
+      <p class="pypi-card-desc">Automated healthcheck configuration and deployment</p>
+    </div>
+    <div class="pypi-card">
+      <p class="pypi-card-name">catchpoint-configurator</p>
+      <p class="pypi-card-desc">Catchpoint synthetic monitoring automation</p>
+    </div>
+    <div class="pypi-card">
+      <p class="pypi-card-name">githubauthlib</p>
+      <p class="pypi-card-desc">Cross-platform GitHub token management library</p>
+    </div>
+  </div>
+</section>
+
+<!-- ADDITIONAL PROJECTS -->
+<section class="section">
+  <p class="section-label">Additional Projects</p>
+  <div class="projects-primary">
+    <div class="project-card">
+      <span class="project-tag tag-devtools">iOS · Swift</span>
+      <p class="project-name">IconInk</p>
+      <p class="project-desc">Digital consent forms for iOS. Streamlined signature and consent workflow for mobile-first environments.</p>
+      <div class="project-links">
+        <a href="https://github.com/fleXRPL/iconink/wiki" class="link-pill">wiki</a>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-tag tag-devtools">iOS · Swift</span>
+      <p class="project-name">RunOn!</p>
+      <p class="project-desc">Discover and manage local running events. Location-aware event aggregation for the running community.</p>
+      <div class="project-links">
+        <a href="https://github.com/fleXRPL/RunOn/wiki" class="link-pill">wiki</a>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-tag tag-devtools">VSCode Extension</span>
+      <p class="project-name">Cursor Rules Dynamic</p>
+      <p class="project-desc">Dynamic <code style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-teal); background: var(--accent-teal-dim); padding: 1px 5px; border-radius: 3px;">.cursorrules</code> management for VSCode — context-aware AI instruction switching per project.</p>
+      <div class="project-links">
+        <a href="https://github.com/fleXRPL/cursor-rules-dynamic/wiki" class="link-pill">wiki</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDARDS -->
+<section class="section">
+  <p class="section-label">Development Standards</p>
+  <div class="standards-row">
+    <div class="standard-item">
+      <div class="standard-icon">PY</div>
+      <div class="standard-text">
+        <strong>Black code style</strong>
+        <span>Uncompromising Python formatter</span>
+      </div>
+    </div>
+    <div class="standard-item">
+      <div class="standard-icon">QA</div>
+      <div class="standard-text">
+        <strong>100% test coverage</strong>
+        <span>pytest + SonarCloud enforcement</span>
+      </div>
+    </div>
+    <div class="standard-item">
+      <div class="standard-icon">SEC</div>
+      <div class="standard-text">
+        <strong>Dependabot enabled</strong>
+        <span>Automated security scanning</span>
+      </div>
+    </div>
+    <div class="standard-item">
+      <div class="standard-icon">AI</div>
+      <div class="standard-text">
+        <strong>AI-native workflow</strong>
+        <span>LLM-assisted architecture & code</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p class="footer-sig">fleXRPL · MIT License · Built with AI partnership</p>
+  <div class="footer-links">
+    <a href="https://github.com/fleXRPL">GitHub</a>
+    <a href="https://github.com/orgs/fleXRPL/discussions">Discussions</a>
+    <a href="mailto:contact@flexrpl.org">Contact</a>
+    <a href="https://pypi.org/search/?q=flexrpl">PyPI</a>
+  </div>
+</footer>
+
+</body>
+</html>
